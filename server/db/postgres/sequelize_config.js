@@ -2,7 +2,7 @@ module.exports = {
   development: {
     username: process.env.PGUSER || 'root',
     password: null,
-    database: 'react_webpack_node_development',
+    database: 'justus-development',
     host: '127.0.0.1',
     dialect: 'postgres'
   },
