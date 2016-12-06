@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames/bind';
-import styles from 'css/components/topic-item';
+import styles from 'css/components/resource-item';
 
 const cx = classNames.bind(styles);
 
-const TopicItem = ({ text, id, incrementCount, decrementCount, destroyTopic }) => {
+const ResourceItem = ({ text, id, incrementCount, decrementCount, destroyResource }) => {
   const onIncrement = () => {
     incrementCount(id);
   };
@@ -12,12 +12,12 @@ const TopicItem = ({ text, id, incrementCount, decrementCount, destroyTopic }) =
     decrementCount(id);
   };
   const onDestroy = () => {
-    destroyTopic(id);
+    destroyResource(id);
   };
 
   return (
-    <li className={cx('topic-item')} key={id}>
-      <span className={cx('topic')}>{text}</span>
+    <li className={cx('resource-item')} key={id}>
+      <span className={cx('resource')}>{text}</span>
       <button
         className={cx('button', 'increment')}
         onClick={onIncrement}>+</button>
@@ -31,12 +31,12 @@ const TopicItem = ({ text, id, incrementCount, decrementCount, destroyTopic }) =
   );
 };
 
-TopicItem.propTypes = {
+ResourceItem.propTypes = {
   text: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   incrementCount: PropTypes.func.isRequired,
   decrementCount: PropTypes.func.isRequired,
-  destroyTopic: PropTypes.func.isRequired
+  destroyResource: PropTypes.func.isRequired
 };
 
-export default TopicItem;
+export default ResourceItem;

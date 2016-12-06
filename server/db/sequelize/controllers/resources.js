@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import Models from '../models';
-const Topic = Models.Topic;
+const Resource = Models.Resource;
 const sequelize = Models.sequelize;
 
 /**
  * List
  */
 export function all(req, res) {
-  Topic.findAll().then((topics) => {
-    res.json(topics);
+  Resource.findAll().then((resources) => {
+    res.json(resources);
   }).catch((err) => {
     console.log(err);
     res.status(500).send('Error in first query');
@@ -16,10 +16,10 @@ export function all(req, res) {
 }
 
 /**
- * Add a Topic
+ * Add a Resource
  */
 export function add(req, res) {
-  Topic.create(req.body).then(() => {
+  Resource.create(req.body).then(() => {
     res.status(200).send('OK');
   }).catch((err) => {
     console.log(err);
@@ -28,7 +28,7 @@ export function add(req, res) {
 }
 
 /**
- * Update a topic
+ * Update a resource
  */
 export function update(req, res) {
   const query = { id: req.params.id };
@@ -38,7 +38,7 @@ export function update(req, res) {
   const data = _.omit(req.body, omitKeys);
 
   if (isFull) {
-    Topic.update(data, { where: query }).then(() => {
+    Resource.update(data, { where: query }).then(() => {
       res.status(200).send('Updated successfully');
     }).catch((err) => {
       console.log(err);
@@ -46,7 +46,7 @@ export function update(req, res) {
     });
   } else {
     const sign = isIncrement ? '+' : '-';
-    Topic.update({
+    Resource.update({
       count: sequelize.literal(`count${sign}1`)
     }, { where: query }).then(() => {
       res.status(200).send('Updated successfully');
@@ -59,10 +59,10 @@ export function update(req, res) {
 }
 
 /**
- * Remove a topic
+ * Remove a resource
  */
 export function remove(req, res) {
-  Topic.destroy({ where: { id: req.params.id } }).then(() => {
+  Resource.destroy({ where: { id: req.params.id } }).then(() => {
     res.status(200).send('Removed Successfully');
   }).catch((err) => {
     console.log(err);

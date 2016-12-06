@@ -5,7 +5,7 @@ import md5 from 'spark-md5';
 import { polyfill } from 'es6-promise';
 import axios from 'axios';
 import expect from 'expect';
-import * as actions from 'actions/topics';
+import * as actions from 'actions/resources';
 import * as types from 'types';
 
 polyfill();
@@ -13,23 +13,23 @@ polyfill();
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-describe('Topic Actions', () => {
+describe('Resource Actions', () => {
   describe('Asynchronous actions', () => {
     let sandbox;
 
     const index = 0;
-    const topic = 'A time machine';
-    const id = md5.hash(topic);
+    const resource = 'A time machine';
+    const id = md5.hash(resource);
     const data = {
       id,
       count: 1,
-      text: topic
+      text: resource
     };
 
     const initialState = {
-      topic: {
-        topics: [],
-        newtopic: ''
+      resource: {
+        resources: [],
+        newresource: ''
       }
     };
 
@@ -56,7 +56,7 @@ describe('Topic Actions', () => {
       sandbox.stub(axios, 'post').returns(Promise.resolve({ status: 200 }));
 
       const store = mockStore(initialState);
-      store.dispatch(actions.createTopic(topic))
+      store.dispatch(actions.createResource(resource))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         }).then(done)
@@ -73,21 +73,21 @@ describe('Topic Actions', () => {
         }, {
           type: types.CREATE_TOPIC_FAILURE,
           id,
-          error: 'Oops! Something went wrong and we couldn\'t create your topic'
+          error: 'Oops! Something went wrong and we couldn\'t create your resource'
         }
       ];
-      sandbox.stub(axios, 'post').returns(Promise.reject({status: 404, data: 'Oops! Something went wrong and we couldn\'t create your topic'}));
+      sandbox.stub(axios, 'post').returns(Promise.reject({status: 404, data: 'Oops! Something went wrong and we couldn\'t create your resource'}));
 
       const store = mockStore(initialState);
-      store.dispatch(actions.createTopic(topic))
+      store.dispatch(actions.createResource(resource))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         }).then(done)
         .catch(done);
     });
 
-    it('dispatches a duplicate action for a duplicate topic', () => {
-      initialState.topic.topics.push(data);
+    it('dispatches a duplicate action for a duplicate resource', () => {
+      initialState.resource.resources.push(data);
 
       const expectedActions = [
         {
@@ -96,9 +96,9 @@ describe('Topic Actions', () => {
       ];
 
       const store = mockStore(initialState);
-      store.dispatch(actions.createTopic(topic));
+      store.dispatch(actions.createResource(resource));
       expect(store.getActions()).toEqual(expectedActions);
-      initialState.topic.topics.pop();
+      initialState.resource.resources.pop();
     });
 
     it('incrementCount dispatches an increment count action on success', done => {
@@ -121,7 +121,7 @@ describe('Topic Actions', () => {
       {
         type: types.CREATE_TOPIC_FAILURE,
         id: data.id,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote'
+        error: 'Oops! Something went wrong and we couldn\'t add your splash'
       }];
       sandbox.stub(axios, 'put').returns(Promise.reject({ status: 400 }));
       const store = mockStore();
@@ -151,7 +151,7 @@ describe('Topic Actions', () => {
       const expectedActions = [
       {
         type: types.CREATE_TOPIC_FAILURE,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote',
+        error: 'Oops! Something went wrong and we couldn\'t add your splash',
         id: data.id
       }];
       sandbox.stub(axios, 'put').returns(Promise.reject({ status: 400 }));
@@ -163,7 +163,7 @@ describe('Topic Actions', () => {
         .catch(done);
     });
 
-    it('destroyTopic dispatches a decrement count action on success', done => {
+    it('destroyResource dispatches a decrement count action on success', done => {
       const expectedActions = [
       {
         type: types.DESTROY_TOPIC,
@@ -171,23 +171,23 @@ describe('Topic Actions', () => {
       }];
       sandbox.stub(axios, 'delete').returns(Promise.resolve({ status: 200 }));
       const store = mockStore();
-      store.dispatch(actions.destroyTopic(data.id))
+      store.dispatch(actions.destroyResource(data.id))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         }).then(done)
         .catch(done);
     });
 
-    it('destroyTopic should not dispatch an decrement count action on failure', done => {
+    it('destroyResource should not dispatch an decrement count action on failure', done => {
       const expectedActions = [
       {
         type: types.CREATE_TOPIC_FAILURE,
         id: data.id,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote'
+        error: 'Oops! Something went wrong and we couldn\'t add your splash'
       }];
       sandbox.stub(axios, 'delete').returns(Promise.reject({ status: 400 }));
       const store = mockStore();
-      store.dispatch(actions.destroyTopic(data.id))
+      store.dispatch(actions.destroyResource(data.id))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         }).then(done)
@@ -196,12 +196,12 @@ describe('Topic Actions', () => {
   });
   describe('Action creator unit tests', () => {
     const index = 0;
-    const topic = 'A time machine';
-    const id = md5.hash(topic);
+    const resource = 'A time machine';
+    const id = md5.hash(resource);
     const data = {
       id,
       count: 1,
-      text: topic
+      text: resource
     };
     let sandbox;
 
@@ -229,7 +229,7 @@ describe('Topic Actions', () => {
       expect(actions.decrement(id)).toEqual(expectedAction);
     });
 
-    it('should create an action object to destroy a topic', () => {
+    it('should create an action object to destroy a resource', () => {
       const expectedAction = {
         type: types.DESTROY_TOPIC,
         id
@@ -237,34 +237,34 @@ describe('Topic Actions', () => {
       expect(actions.destroy(id)).toEqual(expectedAction);
     });
 
-    it('should create an action object with a new topic', () => {
+    it('should create an action object with a new resource', () => {
       const expectedAction = {
         type: types.TYPING,
-        newTopic: data.text
+        newResource: data.text
       };
       expect(actions.typing(data.text)).toEqual(expectedAction);
     });
 
-    it('should create an action object with a new topic request', () => {
+    it('should create an action object with a new resource request', () => {
       const expectedAction = {
         type: types.CREATE_TOPIC_REQUEST,
         id: data.id,
         count: data.count,
         text: data.text
       };
-      expect(actions.createTopicRequest(data)).toEqual(expectedAction);
+      expect(actions.createResourceRequest(data)).toEqual(expectedAction);
     });
 
-    it('should create an action object on a new topic success', () => {
+    it('should create an action object on a new resource success', () => {
       const expectedAction = {
         type: types.CREATE_TOPIC_SUCCESS
       };
-      expect(actions.createTopicSuccess()).toEqual(expectedAction);
+      expect(actions.createResourceSuccess()).toEqual(expectedAction);
     });
 
-    it('should create an action object on a new topic failure', () => {
+    it('should create an action object on a new resource failure', () => {
       const dataFail = Object.assign({}, {
-        error: 'Oops! Something went wrong and we couldn\'t create your topic',
+        error: 'Oops! Something went wrong and we couldn\'t create your resource',
         id: data.id
       });
       const expectedAction = {
@@ -272,14 +272,14 @@ describe('Topic Actions', () => {
         id: dataFail.id,
         error: dataFail.error
       };
-      expect(actions.createTopicFailure(dataFail)).toEqual(expectedAction);
+      expect(actions.createResourceFailure(dataFail)).toEqual(expectedAction);
     });
 
-    it('should create an action on a topic duplicate', () => {
+    it('should create an action on a resource duplicate', () => {
       const expectedAction = {
         type: types.CREATE_TOPIC_DUPLICATE
       };
-      expect(actions.createTopicDuplicate()).toEqual(expectedAction);
+      expect(actions.createResourceDuplicate()).toEqual(expectedAction);
     });
 
   });

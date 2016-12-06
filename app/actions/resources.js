@@ -6,7 +6,7 @@ import * as types from 'types';
 
 polyfill();
 
-export function makeTopicRequest(method, id, data, api = '/topic') {
+export function makeResourceRequest(method, id, data, api = '/resource') {
   return request[method](api + (id ? ('/' + id) : ''), data);
 }
 
@@ -26,7 +26,7 @@ export function destroy(id) {
 export function typing(text) {
   return {
     type: types.TYPING,
-    newTopic: text
+    newResource: text
   };
 }
 
@@ -34,7 +34,7 @@ export function typing(text) {
  * @param data
  * @return a simple JS object
  */
-export function createTopicRequest(data) {
+export function createResourceRequest(data) {
   return {
     type: types.CREATE_TOPIC_REQUEST,
     id: data.id,
@@ -43,13 +43,13 @@ export function createTopicRequest(data) {
   };
 }
 
-export function createTopicSuccess() {
+export function createResourceSuccess() {
   return {
     type: types.CREATE_TOPIC_SUCCESS
   };
 }
 
-export function createTopicFailure(data) {
+export function createResourceFailure(data) {
   return {
     type: types.CREATE_TOPIC_FAILURE,
     id: data.id,
@@ -57,7 +57,7 @@ export function createTopicFailure(data) {
   };
 }
 
-export function createTopicDuplicate() {
+export function createResourceDuplicate() {
   return {
     type: types.CREATE_TOPIC_DUPLICATE
   };
@@ -67,7 +67,7 @@ export function createTopicDuplicate() {
 // which will get executed by Redux-Thunk middleware
 // This function does not need to be pure, and thus allowed
 // to have side effects, including executing asynchronous API calls.
-export function createTopic(text) {
+export function createResource(text) {
   return (dispatch, getState) => {
     // If the text box is empty
     if (text.trim().length <= 0) return;
@@ -75,7 +75,7 @@ export function createTopic(text) {
     const id = md5.hash(text);
     // Redux thunk's middleware receives the store methods `dispatch`
     // and `getState` as parameters
-    const { topic } = getState();
+    const { resource } = getState();
     const data = {
       count: 1,
       id,
@@ -83,60 +83,60 @@ export function createTopic(text) {
     };
 
     // Conditional dispatch
-    // If the topic already exists, make sure we emit a dispatch event
-    if (topic.topics.filter(topicItem => topicItem.id === id).length > 0) {
+    // If the resource already exists, make sure we emit a dispatch event
+    if (resource.resources.filter(resourceItem => resourceItem.id === id).length > 0) {
       // Currently there is no reducer that changes state for this
       // For production you would ideally have a message reducer that
-      // notifies the user of a duplicate topic
-      return dispatch(createTopicDuplicate());
+      // notifies the user of a duplicate resource
+      return dispatch(createResourceDuplicate());
     }
 
     // First dispatch an optimistic update
-    dispatch(createTopicRequest(data));
+    dispatch(createResourceRequest(data));
 
-    return makeTopicRequest('post', id, data)
+    return makeResourceRequest('post', id, data)
       .then(res => {
         if (res.status === 200) {
           // We can actually dispatch a CREATE_TOPIC_SUCCESS
           // on success, but I've opted to leave that out
           // since we already did an optimistic update
           // We could return res.json();
-          return dispatch(createTopicSuccess());
+          return dispatch(createResourceSuccess());
         }
       })
       .catch(() => {
-        return dispatch(createTopicFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your topic'}));
+        return dispatch(createResourceFailure({ id, error: 'Oops! Something went wrong and we couldn\'t create your resource'}));
       });
   };
 }
 
 export function incrementCount(id) {
   return dispatch => {
-    return makeTopicRequest('put', id, {
+    return makeResourceRequest('put', id, {
         isFull: false,
         isIncrement: true
       })
       .then(() => dispatch(increment(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createResourceFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your splash'})));
   };
 }
 
 export function decrementCount(id) {
   return dispatch => {
-    return makeTopicRequest('put', id, {
+    return makeResourceRequest('put', id, {
         isFull: false,
         isIncrement: false
       })
       .then(() => dispatch(decrement(id)))
-      .catch(() => dispatch(createTopicFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createResourceFailure({id, error: 'Oops! Something went wrong and we couldn\'t add your splash'})));
   };
 }
 
-export function destroyTopic(id) {
+export function destroyResource(id) {
   return dispatch => {
-    return makeTopicRequest('delete', id)
+    return makeResourceRequest('delete', id)
       .then(() => dispatch(destroy(id)))
-      .catch(() => dispatch(createTopicFailure({id,
-        error: 'Oops! Something went wrong and we couldn\'t add your vote'})));
+      .catch(() => dispatch(createResourceFailure({id,
+        error: 'Oops! Something went wrong and we couldn\'t add your splash'})));
   };
 }

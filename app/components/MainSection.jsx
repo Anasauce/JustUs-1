@@ -1,33 +1,33 @@
 import React, { PropTypes } from 'react';
-import TopicItem from 'components/TopicItem';
+import ResourceItem from 'components/ResourceItem';
 import classNames from 'classnames/bind';
 import styles from 'css/components/main-section';
 
 const cx = classNames.bind(styles);
 
-const MainSection = ({ topics, onIncrement, onDecrement, onDestroy }) => {
-  const topicItems = topics.map((topic, key) => {
+const MainSection = ({ resources, onIncrement, onDecrement, onDestroy }) => {
+  const resourceItems = resources.map((resource, key) => {
     return (
-      <TopicItem
+      <ResourceItem
         index={key}
-        id={topic.id}
+        id={resource.id}
         key={key}
-        text={topic.text}
+        text={resource.text}
         incrementCount={onIncrement}
         decrementCount={onDecrement}
-        destroyTopic={onDestroy} />);
+        destroyResource={onDestroy} />);
   });
 
   return (
     <div className={cx('main-section')}>
-      <h3 className={cx('header')}>Vote for your favorite hack day idea</h3>
-      <ul className={cx('list')}>{topicItems}</ul>
+      <h3 className={cx('header')}>Splash for your favorite hack day idea</h3>
+      <ul className={cx('list')}>{resourceItems}</ul>
     </div>
   );
 };
 
 MainSection.propTypes = {
-  topics: PropTypes.array.isRequired,
+  resources: PropTypes.array.isRequired,
   onIncrement: PropTypes.func.isRequired,
   onDecrement: PropTypes.func.isRequired,
   onDestroy: PropTypes.func.isRequired

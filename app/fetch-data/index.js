@@ -1,2 +1,2 @@
-export { default as fetchVoteData } from './fetchVoteData';
+export { default as fetchSplashData } from './fetchSplashData';
 

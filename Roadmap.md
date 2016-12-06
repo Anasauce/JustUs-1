@@ -46,5 +46,5 @@ Existing react-webpack-node will be moved to that repository.
 - [ ] Server-side react-router authentication
 - [ ] MongoDB
 - [ ] Postgresql
-- [ ] Vote App example
+- [ ] Splash App example
 

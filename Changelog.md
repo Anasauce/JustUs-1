@@ -8,13 +8,13 @@
 
 If you previously `dispatch` promises and relied on `promise` middleware, we are planning on deprecating the support for this promise middleware. From #509, we remove usage of `promise` in action dispatched for asynchronous API call in redux action calls.
 
-Previously in order to fetch data asynchronously on route change, we would specify a `static need` method in a `container` component, e.g. `Vote.jsx`. This `need` method specified an action creator such as the method below.
+Previously in order to fetch data asynchronously on route change, we would specify a `static need` method in a `container` component, e.g. `Splash.jsx`. This `need` method specified an action creator such as the method below.
 
 ```js
-export function fetchTopics() {
+export function fetchResources() {
   return {
     type: types.GET_TOPICS,
-    promise: makeTopicRequest('get')
+    promise: makeResourceRequest('get')
   };
 }
 ```
@@ -23,7 +23,7 @@ export function fetchTopics() {
 
 When we removed usage of promise in our middleware, we effectively **removed the need for this middleware to exist**! Hooray! It's all to a matter of preference, if you like (and it suits your project), keep it!
 
-If you are wondering how you could handle dispatching of events without `promiseMiddleware`, shout in an issue and someone will help you out. Otherwise, look at how we implemented `fetch-data/fetchVoteData.js` and work your way backwards from there!
+If you are wondering how you could handle dispatching of events without `promiseMiddleware`, shout in an issue and someone will help you out. Otherwise, look at how we implemented `fetch-data/fetchSplashData.js` and work your way backwards from there!
 
 1.7.18
 ===
@@ -224,11 +224,11 @@ We know this is still a space with active development.
 
 1.4.2
 =====
-- Abstract async `fetchTopics` to a more generic `need` method which any component can
+- Abstract async `fetchResources` to a more generic `need` method which any component can
   contain
 - Make endpoints more RESTful
-- Use [axios](https://github.com/mzabriskie/axios) for fetching for topics (only)
-- Use sinonJS for `topics-test.js`
+- Use [axios](https://github.com/mzabriskie/axios) for fetching for resources (only)
+- Use sinonJS for `resources-test.js`
 
 1.4.1
 ======
@@ -246,7 +246,7 @@ We know this is still a space with active development.
 =====
 - Add unit tests to the repository
 - Add the /containers folder and moved several 'components' to containers
-- Prevent duplicate topics from being added
+- Prevent duplicate resources from being added
 
 1.3.2
 =====
@@ -338,8 +338,8 @@ This was actually a pretty big change!
 		- AppDispatcher
 		- Constants
 		- InputFormField.react.js
-- TopicStore to use alt's alt.createStore
-- TopicActions to use alt's alt.createAction
+- ResourceStore to use alt's alt.createStore
+- ResourceActions to use alt's alt.createAction
 - With alt, there won't need to be a dispatcher and constants
 - Using webpack to build client and serverside bundles
 - Removing `/** @jsx React.DOM */`

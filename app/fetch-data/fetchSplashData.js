@@ -1,7 +1,7 @@
-import { voteService } from 'services';
+import { splashService } from 'services';
 
 const fetchData = () => {
-  return voteService.getTopics()
+  return splashService.getResources()
           .then(res => res.data);
 };
 

@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import Page from 'pages/Page';
-import VoteContainer from 'containers/Vote';
+import SplashContainer from 'containers/Splash';
 
-class Vote extends Component {
+class Splash extends Component {
   render() {
     return (
       <Page {...this.getMetaData()}>
-        <VoteContainer {...this.props} />
+        <SplashContainer {...this.props} />
       </Page>
     );
   }
@@ -20,7 +20,7 @@ class Vote extends Component {
   }
 
   pageTitle() {
-    return 'Vote | reactGo';
+    return 'Splash | reactGo';
   }
 
   pageMeta() {
@@ -34,5 +34,4 @@ class Vote extends Component {
   }
 }
 
-export default Vote;
-
+export default Splash;
